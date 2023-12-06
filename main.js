@@ -1,3 +1,7 @@
+// Milestone 1 - Prendendo come riferimento il layout di esempio presente nell’html, stampiamo i post del nostro feed, prendendo le informazioni che ci servono dall’array di oggetti che già trovate.
+// Milestone 2 - Se clicchiamo sul tasto “Mi Piace” cambiamo il colore al testo del bottone e incrementiamo il counter dei likes relativo. Salviamo in un secondo array gli id dei post ai quali abbiamo messo il like.
+
+
 const posts = [
     {
         "id": 1,
@@ -98,3 +102,60 @@ posts.forEach((element) => {
     //inseriamo i post nel container 
     container.innerHTML += post;
 });
+
+
+// creazione array vuoto
+const likedPosts = [];
+
+// creazione variabile bottone
+const varPost = document.querySelectorAll(".post");
+
+varPost.forEach(post => {
+    // selezione bottone like
+    const buttonLike = post.querySelector(".like-button");
+
+    // creazione contatore like
+    let likesCounter = post.querySelector(".js-likes-counter");
+
+    // al click del bottone like
+    buttonLike.addEventListener("click",
+        function(event){
+
+            // non ritorno a inzio pagina
+            event.preventDefault();
+
+            // post a cui abbiamo cliccato like
+            const postId = buttonLike.getAttribute("data-postid");
+            console.log(postId);
+
+            // se il post non è incluso nell'array
+            if(!likedPosts.includes(postId)){
+                // pusho
+                likedPosts.push(postId);
+                // stampo in console
+                console.log(likedPosts);
+                // aggiungo le classi like
+                post.querySelector(".like-button__label").classList.add("like-button--liked");
+                post.querySelector(".like-button__icon").classList.add("like-button--liked");
+                // incremento contatore like
+                likesCounter.textContent = parseInt(likesCounter.textContent) + 1;
+            }
+
+            // BONUS
+            else {
+                // rimuovo il post da likedPosts
+                for( var i = 0; i < likedPosts.length; i++){ 
+                    if ( likedPosts[i] === postId) {
+                      likedPosts.splice(i, 1); 
+                    }
+                 }
+                // rimuovo le classi like
+                post.querySelector(".like-button__label").classList.remove("like-button--liked");
+                post.querySelector(".like-button__icon").classList.remove("like-button--liked");
+                // decremento contatore like
+                likesCounter.textContent = parseInt(likesCounter.textContent) - 1;
+            }
+        }
+    )
+})
+
